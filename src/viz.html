@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Way | Feed 5000 Visualization</title>
     <style>
-        /* Basic Reset & Body Style */
         body {
             font-family: sans-serif;
             margin: 0;
@@ -16,54 +15,47 @@
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
-            min-height: 100vh; /* Ensure body takes full height */
+            min-height: 100vh;
             box-sizing: border-box;
         }
 
-        /* Visualization Container */
         #visualization-container {
             width: 90%;
-            max-width: 800px; /* Max width for the container */
-            height: 75vh; /* Increase height slightly for better spiral view */
-            max-height: 800px; /* Max height */
+            max-width: 800px;
+            height: 75vh;
+            max-height: 800px;
             margin-top: 20px;
             background-color: #fff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            overflow: hidden; /* Hide anything spilling out */
-            display: flex; /* Center SVG if it's smaller */
+            overflow: hidden;
+            display: flex;
             justify-content: center;
             align-items: center;
-            border: 1px solid #ddd; /* Subtle border for container */
+            border: 1px solid #ddd;
         }
 
-        /* SVG Styling */
         svg#triangle-mosaic {
-            display: block; /* Remove extra space below SVG */
+            display: block;
             width: 100%;
             height: 100%;
         }
 
-        /* Triangle Styling */
         .triangle {
-            stroke-width: 1px; /* Border width */
-            /* Remove transition for potentially faster rendering of many elements */
-            /* transition: fill 0.5s ease; */
+            stroke-width: 1px;
+             /* stroke-linejoin: round; // Can help with sharp corners */
         }
 
         .served {
-            /* Served: Black fill, black border */
-            fill: #1a1a1a;
-            stroke: #1a1a1a;
+            fill: #1a1a1a; /* Black fill */
+            stroke: #1a1a1a; /* Black border */
         }
 
         .unserved {
-             /* Unserved: White fill, darker border */
-            fill: #ffffff;
-            stroke: #333333;
+            fill: #ffffff; /* White fill */
+            stroke: #333333; /* Dark border */
         }
 
-        /* Info Text Styling */
         #info {
             text-align: center;
             margin-bottom: 15px;
@@ -80,29 +72,11 @@
             border-radius: 5px;
             text-align: center;
         }
-        #controls label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        #controls input[type=number] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 80px;
-        }
-        #controls button {
-            padding: 8px 15px;
-            background-color: #DAA520; /* Gold color */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-            transition: background-color 0.3s ease;
-        }
-        #controls button:hover {
-            background-color: #b8860b; /* Darker Gold */
-        }
+        /* ... other control styles remain the same ... */
+        #controls label { margin-right: 10px; font-weight: bold; }
+        #controls input[type=number] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 80px; }
+        #controls button { padding: 8px 15px; background-color: #DAA520; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; transition: background-color 0.3s ease; }
+        #controls button:hover { background-color: #b8860b; }
     </style>
 </head>
 <body>
@@ -117,7 +91,6 @@
 
     <div id="visualization-container">
         <svg id="triangle-mosaic"></svg>
-        <!-- Triangles will be generated here by JavaScript -->
     </div>
 
      <div id="controls">
@@ -126,18 +99,17 @@
         <button id="update-button">Update Visualization</button>
     </div>
 
-
     <script>
         // --- Configuration ---
         const TOTAL_TRIANGLES = 5000;
-        let servedCount = 10; // Initial value - start low to see the center pattern
+        let servedCount = 250; // Initial value
 
         // Appearance Settings
-        const TRIANGLE_SIDE = 10; // Base size of the equilateral triangle side
-        const GAP = 3;           // Reduced gap for tighter look
-        const BORDER_WIDTH = 1;  // Reflected in CSS stroke-width
+        const TRIANGLE_SIDE = 12; // Size of the equilateral triangle side
+        const GAP = 2;            // Gap between triangles
+        const SQRT3 = Math.sqrt(3);
 
-        // SVG & Calculation Setup
+        // --- SVG & DOM Elements ---
         const svg = document.getElementById('triangle-mosaic');
         const container = document.getElementById('visualization-container');
         const servedCountSpan = document.getElementById('served-count');
@@ -146,153 +118,204 @@
         const servedInput = document.getElementById('served-input');
         const updateButton = document.getElementById('update-button');
 
-        // Calculate triangle height (height of equilateral triangle = side * sqrt(3) / 2)
-        const TRIANGLE_HEIGHT = TRIANGLE_SIDE * Math.sqrt(3) / 2;
+        // --- Helper Functions ---
 
-        // Calculate effective step distance for staggered grid placement
-        const STEP_X = TRIANGLE_SIDE + GAP; // Horizontal distance between centers in the same row
-        const STEP_Y = TRIANGLE_HEIGHT * 0.5 + GAP * 0.866; // Vertical distance between rows (approx nesting)
-        // const STEP_Y = TRIANGLE_HEIGHT + GAP; // Alternative: simpler vertical step
+        /**
+         * Generates triangle positions using BFS on a hexagonal grid (axial coordinates).
+         * Returns an array of objects: { q, r, index } sorted by distance from center (index).
+         */
+        function generateSpiralOrder(count) {
+            const positions = [];
+            const visited = new Set();
+            // Queue stores {q, r} axial coordinates
+            const queue = [{ q: 0, r: 0 }];
+            visited.add("0,0");
+            positions.push({ q: 0, r: 0, index: 0 });
 
-        function drawVisualization(currentServed) {
+            // Axial directions (6 neighbors) - needed for BFS traversal
+            const directions = [
+                { dq: 1, dr: 0 }, { dq: 0, dr: 1 }, { dq: -1, dr: 1 },
+                { dq: -1, dr: 0 }, { dq: 0, dr: -1 }, { dq: 1, dr: -1 }
+            ];
+
+            let head = 0; // Current index in the queue to process
+            while (positions.length < count && head < queue.length) {
+                const current = queue[head++]; // Get next grid cell coordinates
+
+                // Explore neighbors
+                for (const dir of directions) {
+                    const nq = current.q + dir.dq;
+                    const nr = current.r + dir.dr;
+                    const key = `${nq},${nr}`; // Unique key for visited set
+
+                    if (!visited.has(key)) {
+                        visited.add(key);
+                        const newIndex = positions.length;
+                        if (newIndex < count) {
+                            // Store the axial coordinates and its order index
+                            positions.push({ q: nq, r: nr, index: newIndex });
+                            // Add the new coordinate to the queue for further exploration
+                            queue.push({ q: nq, r: nr });
+                        } else {
+                            break; // Stop generating if desired count is reached
+                        }
+                    }
+                }
+                 if (positions.length >= count) break; // Exit outer loop if count reached
+            }
+            // The 'positions' array now holds {q, r, index} in spiral order by index
+            return positions;
+        }
+
+        /**
+         * Calculates pixel center (cx, cy) and orientation (isUp) for a triangle
+         * given its axial coordinates (q, r), side length S, and gap G.
+         */
+        function getPixelDataForAxial(q, r, S, G) {
+            const H = S * SQRT3 / 2; // Height of the triangle
+
+            // Calculate effective spacing between centers, incorporating the gap
+            // Horizontal distance between centers of same orientation (e.g., two UP triangles side-by-side): S + G
+            // Vertical distance between rows of centers (e.g., UP row 0 and UP row 1): H + G * SQRT3 / 2
+            const effective_horizontal_spacing = S + G;
+            const effective_vertical_row_spacing = H + G * SQRT3 / 2;
+
+            // Map axial (q, r) to pixel center (cx, cy) using the effective spacing
+            // This maps to the centers of upward pointing triangles if (q+r)%2==0
+             const cx = effective_horizontal_spacing * (q + r * 0.5);
+             const cy = effective_vertical_row_spacing * r;
+
+            // Determine orientation based on grid position (checkerboard pattern)
+            // The base tile at (0,0) is typically considered UP
+            const isUp = (q + r) % 2 === 0;
+
+            // Adjust center slightly for DOWN triangles if needed for perfect alignment?
+            // Testing shows the above cx, cy work well as the *reference* point for both orientations.
+
+            return { cx, cy, isUp };
+        }
+
+        /**
+         * Calculates the vertices of an equilateral triangle.
+         * cx, cy: center point
+         * S: side length
+         * isUp: boolean, true if pointing up, false if pointing down
+         * Returns an array of points [{x, y}, {x, y}, {x, y}]
+         */
+        function getTriangleVertices(cx, cy, S, isUp) {
+            const H = S * SQRT3 / 2;
+            const R = H * 2 / 3; // Distance from center to vertex
+            const r = H * 1 / 3; // Distance from center to mid-side
+
+            let p1, p2, p3;
+
+            if (isUp) {
+                p1 = { x: cx,           y: cy - R };    // Top vertex
+                p2 = { x: cx - S / 2,   y: cy + r };    // Bottom-left vertex
+                p3 = { x: cx + S / 2,   y: cy + r };    // Bottom-right vertex
+            } else {
+                p1 = { x: cx,           y: cy + R };    // Bottom vertex
+                p2 = { x: cx - S / 2,   y: cy - r };    // Top-left vertex
+                p3 = { x: cx + S / 2,   y: cy - r };    // Top-right vertex
+            }
+            return [p1, p2, p3];
+        }
+
+         /**
+          * Main drawing function.
+          */
+        function drawVisualization(currentServed, total, S, G) {
             // Clear previous SVG content
             svg.innerHTML = '';
 
+            // Update info text
             servedCountSpan.textContent = currentServed.toLocaleString();
-            remainingCountSpan.textContent = (TOTAL_TRIANGLES - currentServed).toLocaleString();
-            goalCountSpan.textContent = TOTAL_TRIANGLES.toLocaleString();
+            remainingCountSpan.textContent = (total - currentServed).toLocaleString();
+            goalCountSpan.textContent = total.toLocaleString();
             servedInput.value = currentServed; // Keep input synced
 
-            // --- Spiral Generation for Order, Staggered Placement ---
-            let gridX = 0; // Grid coordinates (conceptual)
-            let gridY = 0;
-            let dx = 1; // Direction: 1=E, 0=N, -1=W, 0=S (cycle R, U, L, L, D, D, R, R, R...)
-            let dy = 0;
-            let segmentLength = 1;
-            let segmentPassed = 0;
-            let turnCounter = 0;
-            let triangleCounter = 0;
+            // 1. Get the spiral order (indices associated with axial coords)
+            const spiralOrderData = generateSpiralOrder(total);
 
-            const triangleData = []; // Store data before appending
-
-            // Bounds for viewBox calculation (in pixels)
-            let minPixelX = 0, maxPixelX = 0, minPixelY = 0, maxPixelY = 0;
-
-            // Generate positions using spiral *order* but staggered *placement*
-            while (triangleCounter < TOTAL_TRIANGLES) {
-                 // 1. Calculate Pixel Coordinates for this triangle (index = triangleCounter)
-                 const isRowEven = (gridY % 2 === 0);
-                 // Stagger odd rows horizontally
-                 const offsetX = isRowEven ? 0 : (TRIANGLE_SIDE / 2 + GAP / 2);
-                 const pixelX = gridX * STEP_X + offsetX;
-                 const pixelY = gridY * STEP_Y; // Using calculated STEP_Y
-
-                 // 2. Determine Orientation (alternating checkerboard)
-                 // Ensure center (0,0) starts UP (adjust checkerboard logic slightly)
-                 const isUp = ((gridX + gridY) % 2 === 0);
-
-                 // 3. Store Data
-                 triangleData.push({ pixelX, pixelY, isUp, index: triangleCounter });
-
-                 // 4. Update Bounds (using calculated pixel coordinates)
-                 minPixelX = Math.min(minPixelX, pixelX - TRIANGLE_SIDE / 2);
-                 maxPixelX = Math.max(maxPixelX, pixelX + TRIANGLE_SIDE / 2);
-                 minPixelY = Math.min(minPixelY, pixelY - TRIANGLE_HEIGHT / 2);
-                 maxPixelY = Math.max(maxPixelY, pixelY + TRIANGLE_HEIGHT / 2);
-
-                 // 5. Advance Spiral Logic for *next* position
-                 triangleCounter++;
-                 if (triangleCounter >= TOTAL_TRIANGLES) break;
-
-                 gridX += dx;
-                 gridY += dy;
-                 segmentPassed++;
-
-                 if (segmentPassed === segmentLength) {
-                    segmentPassed = 0;
-                    // Turn 90 degrees left: (dx, dy) -> (-dy, dx)
-                    let tempDx = dx;
-                    dx = -dy;
-                    dy = tempDx;
-
-                    turnCounter++;
-                    // Increase segment length every 2 turns
-                    if (turnCounter % 2 === 0) {
-                        segmentLength++;
-                    }
-                 }
-            }
-
-            // Calculate SVG viewBox dimensions
-            const padding = TRIANGLE_SIDE * 2; // Add padding around edges
-            const viewWidth = (maxPixelX - minPixelX) + padding;
-            const viewHeight = (maxPixelY - minPixelY) + padding;
-            const viewBoxMinX = minPixelX - padding / 2;
-            const viewBoxMinY = minPixelY - padding / 2;
-
-            svg.setAttribute('viewBox', `${viewBoxMinX} ${viewBoxMinY} ${viewWidth} ${viewHeight}`);
-            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-
-            // --- Create SVG Polygon Elements ---
-            const fragment = document.createDocumentFragment(); // Efficient batch appending
-
-            triangleData.forEach(data => {
-                const triangle = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-
-                const cx = data.pixelX; // Center X
-                const cy = data.pixelY; // Center Y
-                const H = TRIANGLE_HEIGHT;
-                const S = TRIANGLE_SIDE;
-
-                let p1x, p1y, p2x, p2y, p3x, p3y;
-
-                // Calculate points based on orientation (centering base or top point for simpler packing feel)
-                if (data.isUp) {
-                    // Upward pointing triangle (base centered at cy)
-                    p1x = cx;             p1y = cy - H / 2; // Top point
-                    p2x = cx - S / 2;     p2y = cy + H / 2; // Bottom-left
-                    p3x = cx + S / 2;     p3y = cy + H / 2; // Bottom-right
-                } else {
-                    // Downward pointing triangle (top point centered at cy)
-                    p1x = cx;             p1y = cy + H / 2; // Bottom point
-                    p2x = cx - S / 2;     p2y = cy - H / 2; // Top-left
-                    p3x = cx + S / 2;     p3y = cy - H / 2; // Top-right
-                }
-
-                triangle.setAttribute('points', `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
-
-                // Apply styling based on served count
-                triangle.classList.add('triangle');
-                if (data.index < currentServed) {
-                    triangle.classList.add('served');
-                } else {
-                    triangle.classList.add('unserved');
-                }
-
-                fragment.appendChild(triangle);
+            // 2. Calculate pixel data (center, orientation) for each triangle in order
+            const trianglePixelData = spiralOrderData.map(axialData => {
+                const { cx, cy, isUp } = getPixelDataForAxial(axialData.q, axialData.r, S, G);
+                return { cx, cy, isUp, index: axialData.index };
             });
 
-             svg.appendChild(fragment); // Add all triangles at once
+            // Calculate bounds for viewBox
+            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+
+            // 3. Create SVG Polygon Elements
+            const fragment = document.createDocumentFragment(); // For batch DOM append
+
+            trianglePixelData.forEach(data => {
+                const vertices = getTriangleVertices(data.cx, data.cy, S, data.isUp);
+                const pointsString = vertices.map(p => `${p.x},${p.y}`).join(' ');
+
+                // Update bounds tracking
+                vertices.forEach(p => {
+                    minX = Math.min(minX, p.x);
+                    maxX = Math.max(maxX, p.x);
+                    minY = Math.min(minY, p.y);
+                    maxY = Math.max(maxY, p.y);
+                });
+
+                const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                polygon.setAttribute('points', pointsString);
+                polygon.classList.add('triangle');
+
+                // Apply styling based on served count (using the index from spiral order)
+                if (data.index < currentServed) {
+                    polygon.classList.add('served');
+                } else {
+                    polygon.classList.add('unserved');
+                }
+                fragment.appendChild(polygon);
+            });
+
+            // Add all polygons to the SVG
+            svg.appendChild(fragment);
+
+            // Set SVG viewBox based on calculated bounds + padding
+            const padding = S * 1.5; // Padding around the mosaic
+            const width = (maxX - minX) + padding * 2;
+            const height = (maxY - minY) + padding * 2;
+            const vbMinX = minX - padding;
+            const vbMinY = minY - padding;
+
+             if (width > 0 && height > 0) { // Ensure valid bounds
+                 svg.setAttribute('viewBox', `${vbMinX} ${vbMinY} ${width} ${height}`);
+                 svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); // Center and scale
+             }
         }
 
         // --- Event Listener for Update Button ---
         updateButton.addEventListener('click', () => {
             let newServedCount = parseInt(servedInput.value, 10);
+            // Validate input
             if (isNaN(newServedCount) || newServedCount < 0) {
                 newServedCount = 0;
             } else if (newServedCount > TOTAL_TRIANGLES) {
                  newServedCount = TOTAL_TRIANGLES;
             }
-            servedCount = newServedCount;
-            drawVisualization(servedCount);
+            servedCount = newServedCount; // Update global servedCount
+            // Redraw with new count
+            drawVisualization(servedCount, TOTAL_TRIANGLES, TRIANGLE_SIDE, GAP);
         });
 
 
         // --- Initial Draw ---
         document.addEventListener('DOMContentLoaded', () => {
             servedInput.max = TOTAL_TRIANGLES;
+            // Set initial value from script variable or input's default
+            servedCount = parseInt(servedInput.value, 10) || servedCount;
+             if (servedCount > TOTAL_TRIANGLES) servedCount = TOTAL_TRIANGLES;
+             if (servedCount < 0) servedCount = 0;
             servedInput.value = servedCount;
-            drawVisualization(servedCount);
+
+            // Initial draw
+            drawVisualization(servedCount, TOTAL_TRIANGLES, TRIANGLE_SIDE, GAP);
         });
 
     </script>
