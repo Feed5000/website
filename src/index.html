@@ -148,7 +148,7 @@
         }
 
 
-        /* --- Hero Section (no changes needed) --- */
+        /* --- Hero Section --- */
         #hero {
             min-height: 75vh;
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -168,7 +168,7 @@
         .cta-button-outline { background: transparent; color: #000000; border: 1px solid #555555; }
         .cta-button-outline:hover { background: #f8f9fa; color: #000000; border-color: #000000; }
 
-        /* --- Section Styling (no changes needed) --- */
+        /* --- Section Styling --- */
         section { padding: 80px 0; }
         section:nth-child(odd) { background-color: #f8f9fa; }
         section:nth-child(even) { background-color: #ffffff; }
@@ -176,22 +176,85 @@
         #hero + section + section { background-color: #ffffff; }
         section h3 { text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #000000; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* --- About Section (no changes needed) --- */
+        /* --- About Section --- */
         #about p { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto; color: #333333; }
 
-        /* --- Feed 5000 Section (no changes needed) --- */
+        /* --- Feed 5000 Section --- */
         #feed5000 .container { text-align: center; }
         #feed5000 .intro-text { font-size: 1.15rem; max-width: 800px; margin: 0 auto 40px auto; color: #333333; }
-        .progress-section { max-width: 700px; margin: 50px auto; }
-        .progress-section h4 { font-size: 1.3rem; font-weight: 500; color: #333333; margin-bottom: 15px; }
-        .progress-info { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; font-weight: 500; color: #000000; }
-        .progress-text { font-size: 1.1rem; }
-        .progress-goal { font-size: 0.95rem; color: #555555; }
-        .progress-container { background-color: #eeeeee; border-radius: 30px; height: 12px; width: 100%; overflow: hidden; }
-        .progress-bar { background-color: #000000; height: 100%; width: 0%; border-radius: 30px; transition: width 1.5s cubic-bezier(0.25, 0.1, 0.25, 1); }
+
+        /* --- Mobile Progress Bar Styles --- */
+        .mobile-only-progress {
+            max-width: 700px;
+            margin: 50px auto;
+            /* Initially hidden on desktop - see responsive */
+            display: none;
+        }
+        .mobile-only-progress h4 { font-size: 1.3rem; font-weight: 500; color: #333333; margin-bottom: 15px; }
+        .mobile-only-progress .progress-info { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; font-weight: 500; color: #000000; }
+        .mobile-only-progress .progress-text { font-size: 1.1rem; }
+        .mobile-only-progress .progress-goal { font-size: 0.95rem; color: #555555; }
+        .mobile-only-progress .progress-container { background-color: #eeeeee; border-radius: 30px; height: 12px; width: 100%; overflow: hidden; }
+        .mobile-only-progress .progress-bar { background-color: #000000; height: 100%; width: 0%; border-radius: 30px; transition: width 1.5s cubic-bezier(0.25, 0.1, 0.25, 1); }
+
+        /* --- Desktop Visualization Styles --- */
+        .desktop-only-viz {
+            /* Initially shown - will be hidden on mobile via media query */
+            display: block;
+            margin: 40px auto 50px auto;
+            max-width: 800px; /* Adjust max-width as needed */
+        }
+
+        #visualization-container {
+            width: 100%; /* Let container control width */
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex; /* Center SVG */
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #eee;
+            min-height: 300px; /* Ensure container has some height */
+        }
+
+        svg#triangle-mosaic {
+            display: block;
+            max-width: 100%; /* Make SVG responsive within container */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .triangle {
+            stroke-width: 0.5px; /* Adjusted for potentially smaller triangles */
+            /* stroke-linejoin: round; */
+        }
+
+        .served {
+            fill: #1a1a1a; /* Black fill */
+            stroke: #1a1a1a; /* Black border */
+        }
+
+        .unserved {
+            fill: #ffffff; /* White fill */
+            stroke: #333333; /* Dark border */
+        }
+
+        #visualization-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        #visualization-info strong {
+            color: #000000;
+            font-weight: 700;
+        }
+        /* --- End Visualization Styles --- */
+
         #feed5000 .support-text { margin-top: 50px; font-size: 1.1rem; color: #333333; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; }
 
-        /* --- How to Help Section (no changes needed) --- */
+        /* --- How to Help Section --- */
          #help .intro-text { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto 50px auto; color: #333333; }
          #help .help-options { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 40px; }
          .help-card { background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.07); text-align: center; flex-basis: 45%; max-width: 400px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #eee; }
@@ -199,7 +262,7 @@
          .help-card h4 { font-size: 1.6rem; color: #000000; margin-bottom: 15px; font-weight: 700; }
          .help-card p { font-size: 1rem; color: #555555; margin-bottom: 25px; }
 
-        /* --- Contact Section (no changes needed) --- */
+        /* --- Contact Section --- */
          #contact .intro-text { text-align: center; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.15rem; color: #333333;}
         #contact-form { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.07); border: 1px solid #eee; }
         .form-group { margin-bottom: 25px; }
@@ -214,15 +277,15 @@
          #contact-form .cta-button { width: 100%; padding: 15px 35px; font-size: 1.05rem; }
          #form-status { margin-top: 20px; text-align: center; font-weight: 500; }
 
-        /* --- Footer (no changes needed) --- */
+        /* --- Footer --- */
         footer { background: #111111; color: #cccccc; text-align: center; padding: 30px 0; margin-top: 0; }
         footer p { font-size: 0.9rem; font-weight: 400; }
         footer a { color: #ffffff; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
 
 
-        /* --- Responsive Design - Mobile Menu Logic --- */
-        @media (max-width: 768px) { /* Breakpoint for mobile menu */
+        /* --- Responsive Design - Mobile Menu Logic & Visualization Toggle --- */
+        @media (max-width: 768px) { /* Breakpoint for mobile menu AND viz toggle */
             html { font-size: 15px; }
             .container { padding: 0 15px; } /* Slightly less padding */
 
@@ -297,6 +360,15 @@
                  border-bottom-color: #f0f0f0;
              }
 
+            /* --- Show Progress Bar, Hide Visualization on Mobile --- */
+            .mobile-only-progress {
+                display: block; /* Show progress bar */
+            }
+            .desktop-only-viz {
+                display: none; /* Hide visualization */
+            }
+
+
              /* --- Other Responsive Adjustments (Existing) --- */
              #hero { min-height: auto; padding: 50px 15px; }
              #hero h2 { font-size: 2.8rem; }
@@ -322,6 +394,7 @@
              .form-group label { font-size: 0.9rem;}
              .help-card { padding: 25px; }
              header nav ul li a { padding: 12px 15px; font-size: 0.95rem;}
+             #visualization-info { font-size: 1em; } /* Slightly smaller on small screens if needed */
         }
 
     </style>
@@ -376,14 +449,27 @@
                     Inspired by the miracle of the loaves and fishes, our ambitious "Feed 5000" initiative aims to provide substantial meals or food support to 5,000 individuals in need within our community. This is more than just food; it's about sharing abundance, showing care, and making a tangible difference.
                 </p>
 
-                <div class="progress-section">
+                <!-- Mobile Progress Bar -->
+                <div class="mobile-only-progress">
                     <h4>Our Progress Towards Feeding 5000</h4>
                     <div class="progress-info">
                         <span class="progress-text" id="progress-counter">Serving 0 People...</span>
-                        <span class="progress-goal">Goal: 5,000</span>
+                        <span class="progress-goal" id="progress-goal-text">Goal: 5,000</span>
                     </div>
                     <div class="progress-container">
                         <div class="progress-bar" id="progress-bar-inner"></div>
+                    </div>
+                </div>
+
+                <!-- Desktop Visualization -->
+                <div class="desktop-only-viz">
+                    <div id="visualization-info">
+                        Served: <strong id="viz-served-count">0</strong> |
+                        Remaining: <strong id="viz-remaining-count">5000</strong> |
+                        Goal: <strong id="viz-goal-count">5000</strong>
+                    </div>
+                    <div id="visualization-container">
+                        <svg id="triangle-mosaic"></svg>
                     </div>
                 </div>
 
@@ -454,7 +540,7 @@
 
     <footer>
         <div class="container">
-            <p>© <span id="current-year"></span> The Way Non-Profit. All Rights Reserved.<a</p>
+            <p>© <span id="current-year"></span> The Way Non-Profit. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -491,35 +577,186 @@
                 });
             }
 
-            // --- Progress Bar Update ---
-            function updateProgressBar(currentValue, goal) {
-                const progressBarInner = document.getElementById('progress-bar-inner');
-                const progressCounter = document.getElementById('progress-counter');
-                if (!progressBarInner || !progressCounter) return;
+            // --- Visualization & Progress Bar Shared Configuration ---
+            const GOAL_PEOPLE = 5000;
+            let currentPeopleServed = 20; // <<<< SET YOUR INITIAL SERVED COUNT HERE
+
+            // --- Visualization Configuration ---
+            const TRIANGLE_SIDE = 15; // Adjusted size for potentially many triangles
+            const GAP = 1;            // Gap between triangles
+            const SQRT3 = Math.sqrt(3);
+
+            // --- Visualization DOM Elements ---
+            const vizSvg = document.getElementById('triangle-mosaic');
+            const vizContainer = document.getElementById('visualization-container');
+            const vizServedCountSpan = document.getElementById('viz-served-count');
+            const vizRemainingCountSpan = document.getElementById('viz-remaining-count');
+            const vizGoalCountSpan = document.getElementById('viz-goal-count');
+
+            // --- Progress Bar DOM Elements ---
+            const progressBarInner = document.getElementById('progress-bar-inner');
+            const progressCounter = document.getElementById('progress-counter');
+            const progressGoalText = document.getElementById('progress-goal-text');
+
+
+            // --- Visualization Helper Functions ---
+            /**
+             * Generates triangle positions using BFS on a hexagonal grid (axial coordinates).
+             * Returns an array of objects: { q, r, index } sorted by distance from center (index).
+             */
+            function generateSpiralOrder(count) {
+                const positions = [];
+                const visited = new Set();
+                const queue = [{ q: 0, r: 0 }];
+                visited.add("0,0");
+                positions.push({ q: 0, r: 0, index: 0 });
+                const directions = [ { dq: 1, dr: 0 }, { dq: 0, dr: 1 }, { dq: -1, dr: 1 }, { dq: -1, dr: 0 }, { dq: 0, dr: -1 }, { dq: 1, dr: -1 } ];
+                let head = 0;
+                while (positions.length < count && head < queue.length) {
+                    const current = queue[head++];
+                    for (const dir of directions) {
+                        const nq = current.q + dir.dq;
+                        const nr = current.r + dir.dr;
+                        const key = `${nq},${nr}`;
+                        if (!visited.has(key)) {
+                            visited.add(key);
+                            const newIndex = positions.length;
+                            if (newIndex < count) {
+                                positions.push({ q: nq, r: nr, index: newIndex });
+                                queue.push({ q: nq, r: nr });
+                            } else { break; }
+                        }
+                    }
+                    if (positions.length >= count) break;
+                }
+                return positions;
+            }
+
+            /** Calculates pixel center (cx, cy) and orientation (isUp) for a triangle */
+            function getPixelDataForAxial(q, r, S, G) {
+                const H = S * SQRT3 / 2;
+                const effective_horizontal_spacing = S + G;
+                const effective_vertical_row_spacing = H + G * SQRT3 / 2;
+                const cx = effective_horizontal_spacing * (q + r * 0.5);
+                const cy = effective_vertical_row_spacing * r;
+                const isUp = (q + r) % 2 === 0;
+                return { cx, cy, isUp };
+            }
+
+            /** Calculates the vertices of an equilateral triangle. */
+            function getTriangleVertices(cx, cy, S, isUp) {
+                const H = S * SQRT3 / 2;
+                const R = H * 2 / 3; const r = H * 1 / 3;
+                let p1, p2, p3;
+                if (isUp) { p1 = { x: cx, y: cy - R }; p2 = { x: cx - S / 2, y: cy + r }; p3 = { x: cx + S / 2, y: cy + r }; }
+                else { p1 = { x: cx, y: cy + R }; p2 = { x: cx - S / 2, y: cy - r }; p3 = { x: cx + S / 2, y: cy - r }; }
+                return [p1, p2, p3];
+            }
+
+            /** Main drawing function for the visualization. */
+            function drawVisualization(currentServed, total, S, G) {
+                if (!vizSvg || !vizContainer) return; // Exit if elements not found
+
+                // Clear previous SVG content
+                vizSvg.innerHTML = '';
+
+                // Update info text for visualization
+                if(vizServedCountSpan && vizRemainingCountSpan && vizGoalCountSpan) {
+                    vizServedCountSpan.textContent = currentServed.toLocaleString();
+                    vizRemainingCountSpan.textContent = (total - currentServed).toLocaleString();
+                    vizGoalCountSpan.textContent = total.toLocaleString();
+                }
+
+                const spiralOrderData = generateSpiralOrder(total);
+                const trianglePixelData = spiralOrderData.map(axialData => {
+                    const { cx, cy, isUp } = getPixelDataForAxial(axialData.q, axialData.r, S, G);
+                    return { cx, cy, isUp, index: axialData.index };
+                });
+
+                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                const fragment = document.createDocumentFragment();
+
+                trianglePixelData.forEach(data => {
+                    const vertices = getTriangleVertices(data.cx, data.cy, S, data.isUp);
+                    const pointsString = vertices.map(p => `${p.x},${p.y}`).join(' ');
+                    vertices.forEach(p => { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y); });
+                    const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                    polygon.setAttribute('points', pointsString);
+                    polygon.classList.add('triangle');
+                    if (data.index < currentServed) { polygon.classList.add('served'); }
+                    else { polygon.classList.add('unserved'); }
+                    fragment.appendChild(polygon);
+                });
+
+                vizSvg.appendChild(fragment);
+
+                // Set SVG viewBox
+                const padding = S * 1.5; // Padding around the mosaic
+                const width = (maxX - minX) + padding * 2;
+                const height = (maxY - minY) + padding * 2;
+                const vbMinX = minX - padding;
+                const vbMinY = minY - padding;
+                if (width > 0 && height > 0) {
+                     vizSvg.setAttribute('viewBox', `${vbMinX} ${vbMinY} ${width} ${height}`);
+                     vizSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                }
+            }
+            // --- End Visualization Functions ---
+
+
+            // --- Combined Update Function (Progress Bar & Visualization) ---
+            function updateProgressDisplays(currentValue, goal) {
+                // Validate Input
                 currentValue = Number(currentValue);
                 goal = Number(goal);
                 if (isNaN(currentValue) || isNaN(goal) || goal <= 0) {
-                    progressCounter.textContent = `Progress data unavailable`; return;
+                    if (progressCounter) progressCounter.textContent = `Progress data unavailable`;
+                    if (vizServedCountSpan) vizServedCountSpan.textContent = 'N/A';
+                    if (vizRemainingCountSpan) vizRemainingCountSpan.textContent = 'N/A';
+                    if (vizGoalCountSpan) vizGoalCountSpan.textContent = goal > 0 ? goal.toLocaleString() : 'N/A';
+                    return;
                 }
                 currentValue = Math.max(0, Math.min(currentValue, goal));
                 const percentage = (currentValue / goal) * 100;
                 const formattedCurrent = currentValue.toLocaleString();
-                progressCounter.textContent = `Serving ${formattedCurrent} People`;
-                setTimeout(() => { progressBarInner.style.width = `${percentage}%`; }, 100);
+                const formattedGoal = goal.toLocaleString();
+
+                // 1. Update Mobile Progress Bar
+                if (progressCounter) progressCounter.textContent = `Serving ${formattedCurrent} People`;
+                if (progressGoalText) progressGoalText.textContent = `Goal: ${formattedGoal}`;
+                if (progressBarInner) {
+                    // Apply width update after a tiny delay for transition effect
+                    setTimeout(() => { progressBarInner.style.width = `${percentage}%`; }, 50);
+                }
+
+                // 2. Update Desktop Visualization (Redraw)
+                 // Check if the visualization is potentially visible (basic check)
+                 // More robust would be to check computed style, but this is simpler
+                 if (window.innerWidth > 768) { // Only draw if likely visible
+                     drawVisualization(currentValue, goal, TRIANGLE_SIDE, GAP);
+                 } else {
+                     // If mobile, ensure viz text is updated even if SVG isn't redrawn
+                     if(vizServedCountSpan && vizRemainingCountSpan && vizGoalCountSpan) {
+                        vizServedCountSpan.textContent = formattedCurrent;
+                        vizRemainingCountSpan.textContent = (goal - currentValue).toLocaleString();
+                        vizGoalCountSpan.textContent = formattedGoal;
+                    }
+                 }
             }
 
+
             // --- Smooth Scrolling & Active Nav Link (Desktop & Mobile) ---
-            const desktopNavLinks = document.querySelectorAll('header nav a[href^="#"]'); // Target all nav links now
+            const allNavLinks = document.querySelectorAll('header nav a[href^="#"]'); // Target all nav links now
             const headerHeight = document.querySelector('header').offsetHeight;
 
-            desktopNavLinks.forEach(anchor => {
+            allNavLinks.forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 5;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 15; // Adjusted offset slightly
                         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                         // Mobile menu closing is handled by the separate listener above
                     }
@@ -527,65 +764,74 @@
             });
 
             // --- Active link highlighting on scroll ---
-            const sections = document.querySelectorAll('section[id]');
-            const allNavLinks = document.querySelectorAll('#main-nav a[href^="#"]'); // Get all links in the nav
+            const sections = document.querySelectorAll('main section[id]'); // Target only main sections
+            const navLinksForHighlight = document.querySelectorAll('#main-nav a[href^="#"]'); // Get all links in the nav
 
             function updateActiveLink() {
                  let currentActive = '';
                  const scrollY = window.pageYOffset;
 
                  sections.forEach(section => {
-                     const sectionTop = section.offsetTop - headerHeight - 10; // Adjusted offset
+                     const sectionTop = section.offsetTop - headerHeight - 20; // Adjusted offset
                      const sectionHeight = section.offsetHeight;
-                     if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                     // Make activation area slightly larger
+                     const activationStart = sectionTop - sectionHeight * 0.2;
+                     const activationEnd = sectionTop + sectionHeight * 0.8;
+
+                     if (scrollY >= activationStart && scrollY < activationEnd) {
                          currentActive = section.getAttribute('id');
                      }
                  });
 
-                  // Check for hero section (top of page)
-                 if (scrollY < document.querySelector('#about').offsetTop - headerHeight - 10) {
+                  // Explicit check for hero section (top of page)
+                 if (scrollY < document.querySelector('#about').offsetTop - headerHeight - 50) {
                      currentActive = 'hero';
                  }
+                 // Check if near bottom, activate last link ('contact')
+                 if ((window.innerHeight + scrollY) >= document.body.offsetHeight - 50) {
+                      const lastSection = sections[sections.length - 1];
+                      if (lastSection) currentActive = lastSection.getAttribute('id');
+                 }
 
-                 allNavLinks.forEach(link => {
+
+                 navLinksForHighlight.forEach(link => {
                      link.classList.remove('active');
-                      // Use getAttribute('href') directly for comparison
                      if (link.getAttribute('href') === `#${currentActive}`) {
                          link.classList.add('active');
                      }
                  });
 
-                 // Fallback if no section is detected as active (e.g., at the very bottom)
-                 // or very top before the first section calculation works perfectly
-                 if (!currentActive && scrollY < 100) {
-                     allNavLinks.forEach(link => link.classList.remove('active'));
-                     const heroLink = document.querySelector('#main-nav a[href="#hero"]');
-                     if (heroLink) heroLink.classList.add('active');
-                 }
+                 // Fallback if no section is active (e.g., between sections) - keep previous or default to home?
+                 // For simplicity, let's ensure 'Home' is active if nothing else is matched near the top.
+                  let oneLinkIsActive = false;
+                  navLinksForHighlight.forEach(link => { if(link.classList.contains('active')) oneLinkIsActive = true; });
+                  if (!oneLinkIsActive && scrollY < 200) {
+                       const heroLink = document.querySelector('#main-nav a[href="#hero"]');
+                       if (heroLink) heroLink.classList.add('active');
+                   }
             }
 
-            window.addEventListener('scroll', updateActiveLink); // Update on scroll
-
-             // --- Set Initial Progress ---
-             const currentPeopleServed = 20;
-             const goalPeople = 5000;
-             updateProgressBar(currentPeopleServed, goalPeople);
+            window.addEventListener('scroll', updateActiveLink);
 
              // --- Update Copyright Year ---
-             document.getElementById('current-year').textContent = new Date().getFullYear();
+             const currentYearSpan = document.getElementById('current-year');
+             if(currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+             }
+
+             // --- Set Initial Progress and Draw Visualization ---
+             updateProgressDisplays(currentPeopleServed, GOAL_PEOPLE);
 
              // --- Set initial active link on load ---
-             updateActiveLink(); // Call once on load to set initial state based on scroll position
              // Handle hash in URL if present
              if (window.location.hash) {
                 const targetElement = document.querySelector(window.location.hash);
                 if (targetElement) {
-                     // Use setTimeout to ensure smooth scrolling happens after initial rendering/calculations
                     setTimeout(() => {
                         const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 5;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        updateActiveLink(); // Update active link after scrolling to hash
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 15;
+                        window.scrollTo({ top: offsetPosition, behavior: 'auto' }); // Use auto scroll on initial load
+                        updateActiveLink(); // Update active link after scrolling
                     }, 150); // Small delay
                 } else {
                      updateActiveLink(); // Update based on current scroll even if hash is invalid
@@ -593,17 +839,29 @@
              } else {
                  updateActiveLink(); // Ensure it's called even without hash
              }
-        });
+
+             // Add resize listener to potentially redraw visualization if switching between mobile/desktop
+             let resizeTimer;
+             window.addEventListener('resize', () => {
+                 clearTimeout(resizeTimer);
+                 resizeTimer = setTimeout(() => {
+                     // Only redraw if needed (e.g., if switching across the breakpoint)
+                     updateProgressDisplays(currentPeopleServed, GOAL_PEOPLE);
+                     updateActiveLink(); // Recalculate active link as offsets might change
+                 }, 250); // Debounce resize event
+             });
+
+        }); // End DOMContentLoaded
 
 
         // --- Simple Contact Form Handler (Client-Side Simulation) ---
         const contactForm = document.getElementById('contact-form');
         const formStatus = document.getElementById('form-status');
-        if (contactForm) {
+        if (contactForm && formStatus) {
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 formStatus.textContent = 'Thank you! Your message has been sent.';
-                formStatus.style.color = '#28a745';
+                formStatus.style.color = '#28a745'; // Success color
                 contactForm.reset();
                 setTimeout(() => { formStatus.textContent = ''; }, 5000);
             });
