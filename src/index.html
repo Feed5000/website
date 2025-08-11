@@ -146,7 +146,9 @@
             top: 0;
             transform: rotate(-45deg);
         }
-
+        .indent {
+            padding-left: 40px
+        }
 
         /* --- Hero Section --- */
         #hero {
@@ -172,16 +174,17 @@
         section { padding: 80px 0; }
         section:nth-child(odd) { background-color: #f8f9fa; }
         section:nth-child(even) { background-color: #ffffff; }
-        #hero + section { background-color: #f8f9fa; }
-        #hero + section + section { background-color: #ffffff; }
+        #welcome + section { background-color: #f8f9fa; }
+        #welcome + section + section { background-color: #ffffff; }
+        #welcome .content { text-align: center; }
         section h3 { text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #000000; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* --- About Section --- */
-        #about p { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto; color: #333333; }
+        /* --- Steps Section --- */
+        /* #steps p { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto; color: #333333; } */
 
-        /* --- Feed 5000 Section --- */
-        #feed5000 .container { text-align: center; }
-        #feed5000 .intro-text { font-size: 1.15rem; max-width: 800px; margin: 0 auto 40px auto; color: #333333; }
+        /* --- Help Section --- */
+        #help .container { text-align: center; }
+        #help .intro-text { font-size: 1.15rem; max-width: 800px; margin: 0 auto 40px auto; color: #333333; }
 
         /* --- Mobile Progress Bar Styles --- */
         .mobile-only-progress {
@@ -252,7 +255,7 @@
         }
         /* --- End Visualization Styles --- */
 
-        #feed5000 .support-text { margin-top: 50px; font-size: 1.1rem; color: #333333; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+        #help .support-text { margin-top: 50px; font-size: 1.1rem; color: #333333; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; }
 
         /* --- How to Help Section --- */
          #help .intro-text { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto 50px auto; color: #333333; }
@@ -400,10 +403,9 @@
     </style>
 </head>
 <body>
-
     <header>
         <div class="container">
-            <h1>The Way</h1>
+            <h1>Welcome to the Family!</h1>
              <!-- Hamburger Button -->
             <button class="menu-toggle" id="menu-toggle-button" aria-label="Toggle menu" aria-expanded="false">
                 <span class="hamburger-icon"></span>
@@ -411,11 +413,9 @@
             <!-- Navigation -->
             <nav id="main-nav">
                 <ul>
-                    <li><a href="#hero" class="active">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#feed5000">Feed 5000</a></li>
-                    <li><a href="#help">Get Involved</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#welcome" class="active">Welcome</a></li>
+                    <li><a href="#steps">Your Next Steps</a></li>
+                    <li><a href="#help">We're Here to Help</a></li>
                 </ul>
             </nav>
         </div>
@@ -423,119 +423,80 @@
 
     <main>
         <!-- Hero Section -->
-        <section id="hero">
+        <section id="welcome">
              <div class="content">
-                <h2>Nourishing Community,<br> Body & Soul</h2>
-                <p>The Way is dedicated to spiritually and physically feeding those in need, following the path of compassion and service.</p>
-                <a href="#feed5000" class="cta-button">Explore "Feed 5000"</a>
-            </div>
+                <p>We are so excited for you! Making the decision to follow Jesus Christ is the most important choice you'll ever make. You've stepped into a new life filled with hope, purpose, and a love that never ends.</p>
+                <p>You're not on this journey alone. You are now part of God's family, and we're here to help you take the next steps in your walk with Jesus.
         </section>
 
         <!-- About Section -->
-        <section id="about">
+        <section id="steps">
             <div class="container">
-                <h3>Our Mission</h3>
+                <h3>Your Next Steps</h3>
                 <p>
-                    At The Way, we believe in holistic nourishment. Our mission is two-fold: to provide essential physical sustenance to those facing hardship, and to offer spiritual support and community to uplift the soul. We strive to be a beacon of hope and practical help in our community.
+                    Starting your journey can feel a little overwhelming, and that's okay! Think of these as simple, practical ways to grow in your faith.
                 </p>
-            </div>
+                <b>1. Get to Know Jesus Through the Bible</b>
+                <p>The Bible is God's personal message to you. It's how we learn about His character, His promises, and the incredible story of His love for us</p>
+                <b>Where to Start:</b>
+                <ul class="indent">
+                    <li>
+                        <b>Purchase a physical Bible or simple download the <a href="https://www.bible.com/">Bible app</a> on your phone
+                    </li>
+                    <li>
+                        <b>Start with the Gospel of John:</b> This book is a fantastic place to begin. It focuses on the life, teachings, and identity of Jesus. You'll get a clear picture of who He is.
+                    </li>
+                    <li>
+                        <b>Then the Book of Acts:</b> This book shows you what happened right after Jesus ascended to heaven. You'll see how the early church began and how the Holy Spirit worked in believers' lives.
+                    </li>
+                </ul>
+                <p><b>Tip:</b>Start with just a few verses a day. The <a href="https://www.bible.com/">Bible app like YouVersion</a>, which has many easy-to-read translations and simple reading plans</p>
+                <b>2. Talk to God in Prayer</b>
+                <p>Prayer is simple talking to God. You don't need fancy words or a perfect script. Just talk to Him as you would a loving friend. Tell Him what's on your mind, thank Him for what He's done, and ask for His help and guidance.
+                <b>Prayers can be</b>
+                <ul class="indent">
+                    <li>
+                        <b>Praise: </b>Thanking God for who He is and His goodness.
+                    </li>
+                    <li>
+                        <b>Confession: </b>Admitting where you've messed up and asking for forgiveness.
+                    </li>
+                    <li>
+                        <b>Thanksgiving: </b>Expressing gratitude for all the blessings in your life.
+                    </li>
+                    <li>
+                        <b>Supplication: </b>Asking for your needs and the nees of others.
+                    </li>
+                </ul>
+            <b>3. Find a Local Church</b>
+            <p>When you gave your life to Jesus, you became part of His body-the Church. A local church is a community of believers where you can learn, grow, and serve together. It's a place to find support, friendship, and encouragement.</p>
+            <b>How to find a church:</b>
+            <ul class="indent">
+                <li>
+                    Ask a friend who attends a church they love.
+                </li>
+                <li>
+                    Use a tool like <a href="https://churchfinder.com">Church Finder</a> or <a href="https://www.thegospelcoalition.org/churches">TGC Church Finder</a>.
+                </li>
+                <li>
+                    Look for a church that teaches directly from the Bible and has a welcoming atmosphere.
+                </li>
+            </ul>
+            <b>4. Tell Someone<b>
+            <p>Your story is powerful. Share your decision to follow Jesus with a trusted friend or family member. It doesn't have to be a big, formal annoucement. Just tell someone, "I've decided to follow Jesus," is a great way to make it real and celebrate this new step.
         </section>
-
-        <!-- Feed 5000 Section -->
-        <section id="feed5000">
-            <div class="container">
-                <h3>The "Feed 5000" Outreach</h3>
-                <p class="intro-text">
-                    Inspired by the miracle of the loaves and fishes, our ambitious "Feed 5000" initiative aims to provide substantial meals or food support to 5,000 individuals in need within our community. This is more than just food; it's about sharing abundance, showing care, and making a tangible difference.
-                </p>
-
-                <!-- Mobile Progress Bar -->
-                <div class="mobile-only-progress">
-                    <h4>Our Progress Towards Feeding 5000</h4>
-                    <div class="progress-info">
-                        <span class="progress-text" id="progress-counter">Serving 0 People...</span>
-                        <span class="progress-goal" id="progress-goal-text">Goal: 5,000</span>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progress-bar-inner"></div>
-                    </div>
-                </div>
-
-                <!-- Desktop Visualization -->
-                <div class="desktop-only-viz">
-                    <div id="visualization-info">
-                        Served: <strong id="viz-served-count">0</strong> |
-                        Remaining: <strong id="viz-remaining-count">5000</strong> |
-                        Goal: <strong id="viz-goal-count">5000</strong>
-                    </div>
-                    <div id="visualization-container">
-                        <svg id="triangle-mosaic"></svg>
-                    </div>
-                </div>
-
-                <p class="support-text">
-                    Join us in this meaningful endeavor. Whether you're an individual looking to volunteer or donate, or a corporate leader seeking impactful community partnership, your support is crucial to reaching our goal.
-                </p>
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="#help" class="cta-button cta-button-outline">See How You Can Help</a>
-                 </div>
-
-            </div>
-        </section>
-
          <!-- How to Help Section -->
          <section id="help">
              <div class="container">
-                <h3>Get Involved & Make a Difference</h3>
+                <h3>We're Here to Help</h3>
                 <p class="intro-text">
-                    Reaching our goal requires community effort. Individuals and corporations alike can play a vital role in bringing spiritual and physical nourishment to those who need it most.
+                    We're so glad you're here. If you have any questions or just want to talk to someone, please don't hestitate to reach out.
+                    <a href="https://x.com/kyletanderson">Follow me on X - @KyleTAnderson</a>
                 </p>
-                <div class="help-options">
-                    <div class="help-card">
-                        <h4>For Individuals</h4>
-                        <p>Volunteer your time, assist with logistics, or make a personal donation. Every contribution makes an impact and helps us reach our target.</p>
-                        <a href="#contact" class="cta-button">Contact Us to Help</a>
-                    </div>
-                    <div class="help-card">
-                        <h4>For Corporate Leaders</h4>
-                        <p>Explore partnerships, sponsor events, organize employee volunteer days, or provide corporate donations. Let's collaborate for greater community impact.</p>
-                         <a href="#contact" class="cta-button">Discuss Partnership</a>
-                    </div>
-                </div>
-             </div>
+                <p>Congratuations again on your decision! You have a beautiful and exciting journey ahead.</p>
+            </div>
          </section>
 
-
-        <!-- Contact Section -->
-        <section id="contact">
-            <div class="container">
-                <h3>Have Questions? Reach Out!</h3>
-                <p class="intro-text">
-                    Whether you want to learn more about our mission, inquire about "Feed 5000", discuss involvement, or simply connect, we'd love to hear from you. Please fill out the form below.
-                </p>
-
-                <form id="contact-form" action="#" method="POST">
-                    <div class="form-group">
-                        <label for="name">Your Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Your Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                     <div class="form-group">
-                        <label for="subject">Subject:</label>
-                        <input type="text" id="subject" name="subject" placeholder="e.g., Volunteering Inquiry, Partnership">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Your Message:</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
-                    <button type="submit" class="cta-button">Send Message</button>
-                </form>
-                 <div id="form-status"></div>
-            </div>
-        </section>
     </main>
 
     <footer>
