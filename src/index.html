@@ -3,830 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Way | Feeding Body & Soul</title>
+    <title>Touch Carousel with Sticky Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic Reset */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px; /* Base font size */
-        }
-
+        /* Custom styles for the carousel */
         body {
-            font-family: 'Inter', sans-serif; /* Clean sans-serif */
-            line-height: 1.7;
-            color: #333333; /* Dark Gray for body text */
-            background-color: #ffffff; /* White background */
-             /* Prevent horizontal scrollbar issues if menu overflows briefly */
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
-
-        /* Font Import (Example: Inter from Google Fonts) */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
-
-        /* Container */
-        .container {
-            max-width: 1140px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .carousel-track {
+            /* This transition will be applied when snapping to a slide */
+            transition: transform 0.3s ease-in-out;
         }
-
-        /* --- Header --- */
-        header {
-            background: #ffffff;
-            color: #000000;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #eeeeee;
+        .carousel-slide {
+            /* Ensure slides don't shrink */
+            flex-shrink: 0;
         }
-
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative; /* Needed for mobile menu positioning */
-        }
-
-        header h1 {
-            font-size: 1.75rem;
-            color: #000000;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            z-index: 1002; /* Ensure logo stays above mobile menu if it overlaps */
-        }
-
-        /* --- Desktop Navigation --- */
-        header nav {
-            display: block; /* Visible by default */
-        }
-
-        header nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        header nav ul li {
-            margin-left: 25px;
-        }
-
-        header nav ul li a {
-            text-decoration: none;
-            color: #555555;
-            font-weight: 500;
-            padding: 8px 0;
-            transition: color 0.3s ease, border-bottom 0.3s ease;
-            border-bottom: 2px solid transparent;
-            font-size: 0.95rem;
-            display: block; /* Ensure padding affects height */
-        }
-
-        header nav ul li a:hover,
-        header nav ul li a.active {
-            color: #000000;
-            border-bottom-color: #000000; /* Use border-color to avoid layout shift */
-        }
-
-        /* --- Hamburger Menu Button --- */
-        .menu-toggle {
-            display: none; /* Hidden on desktop */
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1002; /* Ensure it's above mobile menu background */
-        }
-
-        .menu-toggle .hamburger-icon {
-            width: 25px;
-            height: 2px;
-            background-color: #000000;
-            display: block;
-            position: relative;
-            transition: background-color 0s 0.3s; /* Delay hiding middle bar */
-        }
-
-        .menu-toggle .hamburger-icon::before,
-        .menu-toggle .hamburger-icon::after {
-            content: '';
-            width: 100%;
-            height: 2px;
-            background-color: #000000;
-            position: absolute;
-            left: 0;
-            transition: transform 0.3s ease-in-out, top 0.3s ease-in-out;
-        }
-
-        .menu-toggle .hamburger-icon::before {
-            top: -7px;
-        }
-
-        .menu-toggle .hamburger-icon::after {
-            top: 7px;
-        }
-
-        /* Hamburger animation when menu is open */
-        .menu-toggle.active .hamburger-icon {
-            background-color: transparent; /* Hide middle bar */
-             transition: background-color 0s 0s; /* Hide instantly */
-        }
-
-        .menu-toggle.active .hamburger-icon::before {
-            top: 0;
-            transform: rotate(45deg);
-        }
-
-        .menu-toggle.active .hamburger-icon::after {
-            top: 0;
-            transform: rotate(-45deg);
-        }
-        .indent {
-            padding-left: 40px
-        }
-
-        /* --- Hero Section --- */
-        #hero {
-            min-height: 75vh;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            color: #000000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        #hero .content { max-width: 750px; }
-        #hero h2 { font-size: 3.8rem; margin-bottom: 1.5rem; font-weight: 700; letter-spacing: -1px; color: #000000; }
-        #hero p { font-size: 1.25rem; margin-bottom: 2.5rem; font-weight: 300; color: #555555; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .cta-button { display: inline-block; background: #000000; color: #ffffff; padding: 14px 35px; text-decoration: none; border-radius: 5px; font-weight: 500; font-size: 1rem; transition: background-color 0.3s ease, transform 0.2s ease; border: 1px solid #000000; cursor: pointer; }
-        .cta-button:hover { background: #333333; border-color: #333333; transform: translateY(-2px); }
-        .cta-button-outline { background: transparent; color: #000000; border: 1px solid #555555; }
-        .cta-button-outline:hover { background: #f8f9fa; color: #000000; border-color: #000000; }
-
-        /* --- Section Styling --- */
-        section { padding: 80px 0; }
-        section:nth-child(odd) { background-color: #f8f9fa; }
-        section:nth-child(even) { background-color: #ffffff; }
-        #welcome + section { background-color: #f8f9fa; }
-        #welcome + section + section { background-color: #ffffff; }
-        #welcome .content { text-align: center; }
-        section h3 { text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #000000; font-weight: 700; letter-spacing: -0.5px; }
-
-        /* --- Steps Section --- */
-        /* #steps p { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto; color: #333333; } */
-
-        /* --- Help Section --- */
-        #help .container { text-align: center; }
-        #help .intro-text { font-size: 1.15rem; max-width: 800px; margin: 0 auto 40px auto; color: #333333; }
-
-        /* --- Mobile Progress Bar Styles --- */
-        .mobile-only-progress {
-            max-width: 700px;
-            margin: 50px auto;
-            /* Initially hidden on desktop - see responsive */
-            display: none;
-        }
-        .mobile-only-progress h4 { font-size: 1.3rem; font-weight: 500; color: #333333; margin-bottom: 15px; }
-        .mobile-only-progress .progress-info { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; font-weight: 500; color: #000000; }
-        .mobile-only-progress .progress-text { font-size: 1.1rem; }
-        .mobile-only-progress .progress-goal { font-size: 0.95rem; color: #555555; }
-        .mobile-only-progress .progress-container { background-color: #eeeeee; border-radius: 30px; height: 12px; width: 100%; overflow: hidden; }
-        .mobile-only-progress .progress-bar { background-color: #000000; height: 100%; width: 0%; border-radius: 30px; transition: width 1.5s cubic-bezier(0.25, 0.1, 0.25, 1); }
-
-        /* --- Desktop Visualization Styles --- */
-        .desktop-only-viz {
-            /* Initially shown - will be hidden on mobile via media query */
-            display: block;
-            margin: 40px auto 50px auto;
-            max-width: 800px; /* Adjust max-width as needed */
-        }
-
-        #visualization-container {
-            width: 100%; /* Let container control width */
-            margin-top: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex; /* Center SVG */
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #eee;
-            min-height: 300px; /* Ensure container has some height */
-        }
-
-        svg#triangle-mosaic {
-            display: block;
-            max-width: 100%; /* Make SVG responsive within container */
-            height: auto; /* Maintain aspect ratio */
-        }
-
-        .triangle {
-            stroke-width: 0.5px; /* Adjusted for potentially smaller triangles */
-            /* stroke-linejoin: round; */
-        }
-
-        .served {
-            fill: #1a1a1a; /* Black fill */
-            stroke: #1a1a1a; /* Black border */
-        }
-
-        .unserved {
-            fill: #ffffff; /* White fill */
-            stroke: #333333; /* Dark border */
-        }
-
-        #visualization-info {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-        #visualization-info strong {
-            color: #000000;
-            font-weight: 700;
-        }
-        /* --- End Visualization Styles --- */
-
-        #help .support-text { margin-top: 50px; font-size: 1.1rem; color: #333333; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8; }
-
-        /* --- How to Help Section --- */
-         #help .intro-text { font-size: 1.15rem; text-align: center; max-width: 800px; margin: 0 auto 50px auto; color: #333333; }
-         #help .help-options { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 40px; }
-         .help-card { background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.07); text-align: center; flex-basis: 45%; max-width: 400px; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #eee; }
-         .help-card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
-         .help-card h4 { font-size: 1.6rem; color: #000000; margin-bottom: 15px; font-weight: 700; }
-         .help-card p { font-size: 1rem; color: #555555; margin-bottom: 25px; }
-
-        /* --- Contact Section --- */
-         #contact .intro-text { text-align: center; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.15rem; color: #333333;}
-        #contact-form { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.07); border: 1px solid #eee; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #333333; font-size: 0.95rem; }
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group textarea { width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; font-size: 1rem; font-family: 'Inter', sans-serif; background-color: #fdfdfd; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
-        .form-group input[type="text"]:focus,
-        .form-group input[type="email"]:focus,
-        .form-group textarea:focus { outline: none; border-color: #000000; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1); background-color: #ffffff; }
-        .form-group textarea { height: 150px; resize: vertical; }
-         #contact-form .cta-button { width: 100%; padding: 15px 35px; font-size: 1.05rem; }
-         #form-status { margin-top: 20px; text-align: center; font-weight: 500; }
-
-        /* --- Footer --- */
-        footer { background: #111111; color: #cccccc; text-align: center; padding: 30px 0; margin-top: 0; }
-        footer p { font-size: 0.9rem; font-weight: 400; }
-        footer a { color: #ffffff; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-
-
-        /* --- Responsive Design - Mobile Menu Logic & Visualization Toggle --- */
-        @media (max-width: 768px) { /* Breakpoint for mobile menu AND viz toggle */
-            html { font-size: 15px; }
-            .container { padding: 0 15px; } /* Slightly less padding */
-
-            /* --- Mobile Header Adjustments --- */
-             header .container {
-                /* Keep items aligned vertically */
-             }
-             header h1 {
-                 font-size: 1.6rem; /* Adjust logo size */
-             }
-
-             /* --- Show Hamburger, Hide Desktop Nav --- */
-             .menu-toggle {
-                 display: block; /* Show the hamburger */
-             }
-             header nav {
-                display: block; /* Keep the nav element, but we'll hide the ul */
-                position: absolute; /* Position the whole nav container */
-                top: 100%; /* Position below the header */
-                left: 0;
-                width: 100%;
-                background-color: #ffffff; /* White background for dropdown */
-                border-top: 1px solid #eeeeee;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-
-                /* Hide menu off-screen or via height/opacity */
-                max-height: 0;
-                overflow: hidden;
-                opacity: 0;
-                visibility: hidden;
-                transition: max-height 0.4s ease-out, opacity 0.3s ease-out, visibility 0s 0.4s;
-             }
-
-             header nav.mobile-nav-open {
-                 max-height: 500px; /* Allow space for links */
-                 opacity: 1;
-                 visibility: visible;
-                 transition: max-height 0.4s ease-in, opacity 0.3s ease-in, visibility 0s 0s;
-             }
-
-             header nav ul {
-                display: block; /* Stack list items vertically */
-                padding: 10px 0; /* Padding inside the opened menu */
-                width: 100%;
-                margin: 0; /* Reset desktop margin */
-            }
-
-             header nav ul li {
-                margin: 0; /* Reset desktop margin */
-                text-align: center; /* Center align menu items */
-            }
-
-             header nav ul li a {
-                 padding: 15px 20px; /* Larger touch targets */
-                 font-size: 1rem;
-                 font-weight: 500;
-                 color: #333333; /* Dark Gray links */
-                 border-bottom: 1px solid #f0f0f0; /* Separator line */
-             }
-             header nav ul li:last-child a {
-                 border-bottom: none; /* Remove border from last item */
-             }
-
-             header nav ul li a.active {
-                color: #000000; /* Black for active link */
-                font-weight: 700;
-                border-bottom-color: #f0f0f0; /* Keep separator, don't use the underline */
-             }
-             header nav ul li a:hover {
-                 background-color: #f8f9fa; /* Light gray hover */
-                 color: #000000;
-                 border-bottom-color: #f0f0f0;
-             }
-
-            /* --- Show Progress Bar, Hide Visualization on Mobile --- */
-            .mobile-only-progress {
-                display: block; /* Show progress bar */
-            }
-            .desktop-only-viz {
-                display: none; /* Hide visualization */
-            }
-
-
-             /* --- Other Responsive Adjustments (Existing) --- */
-             #hero { min-height: auto; padding: 50px 15px; }
-             #hero h2 { font-size: 2.8rem; }
-             #hero p { font-size: 1.15rem; }
-             section { padding: 60px 0; }
-             section h3 { font-size: 2.2rem; margin-bottom: 40px;}
-             .help-options { flex-direction: column; align-items: center; }
-             .help-card { flex-basis: 90%; max-width: 450px; padding: 30px; }
-             #contact-form { padding: 30px; }
-             .form-group input[type="text"],
-             .form-group input[type="email"],
-             .form-group textarea { padding: 12px; }
-        }
-
-        @media (max-width: 480px) {
-             html { font-size: 14px; }
-             header h1 { font-size: 1.5rem; }
-             #hero h2 { font-size: 2.2rem; }
-             #hero p { font-size: 1.05rem; }
-             section h3 { font-size: 1.9rem; }
-             .cta-button { padding: 12px 25px; font-size: 0.95rem; }
-             #contact-form { padding: 25px; }
-             .form-group label { font-size: 0.9rem;}
-             .help-card { padding: 25px; }
-             header nav ul li a { padding: 12px 15px; font-size: 0.95rem;}
-             #visualization-info { font-size: 1em; } /* Slightly smaller on small screens if needed */
-        }
-
     </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Welcome to the Family!</h1>
-             <!-- Hamburger Button -->
-            <button class="menu-toggle" id="menu-toggle-button" aria-label="Toggle menu" aria-expanded="false">
-                <span class="hamburger-icon"></span>
-            </button>
-            <!-- Navigation -->
-            <nav id="main-nav">
-                <ul>
-                    <li><a href="#welcome" class="active">Welcome</a></li>
-                    <li><a href="#steps">Your Next Steps</a></li>
-                    <li><a href="#help">We're Here to Help</a></li>
-                </ul>
-            </nav>
+<body class="bg-gray-100">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 bg-white/80 backdrop-blur-md shadow-sm z-10">
+        <div class="max-w-2xl mx-auto py-4 px-4 text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Welcome</h1>
+            <p class="mt-2 text-gray-600">You've made the best decision of your life. Now what? Here are your first steps as a new follower of Christ</p>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="welcome">
-             <div class="content">
-                <p>We are so excited for you! Making the decision to follow Jesus Christ is the most important choice you'll ever make. You've stepped into a new life filled with hope, purpose, and a love that never ends.</p>
-                <p>You're not on this journey alone. You are now part of God's family, and we're here to help you take the next steps in your walk with Jesus.
-        </section>
+    <!-- Main content area that will scroll -->
+    <main class="flex items-center justify-center py-12">
+        <div class="w-full max-w-2xl mx-auto p-4">
+            <!-- Carousel Container -->
+            <div id="carousel" class="relative overflow-hidden rounded-lg bg-white shadow-lg">
+                
+                <!-- Carousel Track: This holds all the slides -->
+                <div id="carousel-track" class="flex">
+                    
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide w-full p-8 md:p-12 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-4">
+                            <svg class="fill-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M224 360C224 373.3 213.3 384 200 384C186.7 384 176 373.3 176 360L176 247.4L264.2 127.7C277.3 109.9 273.5 84.9 255.7 71.8C237.9 58.7 212.9 62.5 199.8 80.3L106.5 206.9C89.3 230.2 80 258.5 80 287.6L80 398.3L21.9 417.7C8.8 422 0 434.2 0 448L0 544C0 554 4.7 563.5 12.7 569.5C20.7 575.5 31.1 577.5 40.8 574.7L195.2 530.6C250.2 514.9 288 464.7 288 407.5L288 288C288 270.3 273.7 256 256 256C238.3 256 224 270.3 224 288L224 360zM416 360L416 288C416 270.3 401.7 256 384 256C366.3 256 352 270.3 352 288L352 407.6C352 464.8 389.9 515 444.8 530.7L599.2 574.8C608.9 577.6 619.2 575.6 627.3 569.6C635.4 563.6 640 554 640 544L640 448C640 434.2 631.2 422 618.1 417.6L560 398.2L560 287.5C560 258.5 550.7 230.2 533.5 206.8L440.2 80.3C427.1 62.5 402.1 58.7 384.3 71.8C366.5 84.9 362.7 109.9 375.8 127.7L464 247.4L464 360C464 373.3 453.3 384 440 384C426.7 384 416 373.3 416 360z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Step 1: Pray</h3>
+                            <p class="text-gray-600"><b>Prayer is simply talking to God.</b> You don't need fancy words. Tell Him what's on your mind. Thank Him for what He's done, and ask for His help. He's always listening.</p>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide w-full p-8 md:p-12 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center mb-4">
+                            <svg class="fill-teal-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M320 205.3L320 514.6L320.5 514.4C375.1 491.7 433.7 480 492.8 480L512 480L512 160L492.8 160C450.6 160 408.7 168.4 369.7 184.6C352.9 191.6 336.3 198.5 320 205.3zM294.9 125.5L320 136L345.1 125.5C391.9 106 442.1 96 492.8 96L528 96C554.5 96 576 117.5 576 144L576 496C576 522.5 554.5 544 528 544L492.8 544C442.1 544 391.9 554 345.1 573.5L332.3 578.8C324.4 582.1 315.6 582.1 307.7 578.8L294.9 573.5C248.1 554 197.9 544 147.2 544L112 544C85.5 544 64 522.5 64 496L64 144C64 117.5 85.5 96 112 96L147.2 96C197.9 96 248.1 106 294.9 125.5z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Step 2: Read the Bible</h3>
+                            <p class="text-gray-600">The <b>Bible is God's message to you.</b> Start with the <b>Gospel of John</b> to learn about how the first Christians lived.
+                                <ul><li><b>Tip:</b> Try a free app like YouVersion for easy reading plans.</p>
+                    </div>
 
-        <!-- About Section -->
-        <section id="steps">
-            <div class="container">
-                <h3>Your Next Steps</h3>
-                <p>
-                    Starting your journey can feel a little overwhelming, and that's okay! Think of these as simple, practical ways to grow in your faith.
-                </p>
-                <b>1. Get to Know Jesus Through the Bible</b>
-                <p>The Bible is God's personal message to you. It's how we learn about His character, His promises, and the incredible story of His love for us</p>
-                <b>Where to Start:</b>
-                <ul class="indent">
-                    <li>
-                        <b>Purchase a physical Bible or simple download the <a href="https://www.bible.com/">Bible app</a> on your phone</b>
-                    </li>
-                    <li>
-                        <b>Start with the Gospel of John:</b> This book is a fantastic place to begin. It focuses on the life, teachings, and identity of Jesus. You'll get a clear picture of who He is.
-                    </li>
-                    <li>
-                        <b>Then the Book of Acts:</b> This book shows you what happened right after Jesus ascended to heaven. You'll see how the early church began and how the Holy Spirit worked in believers' lives.
-                    </li>
-                </ul>
-                <p><b>Tip:</b>Start with just a few verses a day. The <a href="https://www.bible.com/">Bible app like YouVersion</a>, which has many easy-to-read translations and simple reading plans</p>
-                <b>2. Talk to God in Prayer</b>
-                <p>Prayer is simple talking to God. You don't need fancy words or a perfect script. Just talk to Him as you would a loving friend. Tell Him what's on your mind, thank Him for what He's done, and ask for His help and guidance.
-                <b>Prayers can be</b>
-                <ul class="indent">
-                    <li>
-                        <b>Praise: </b>Thanking God for who He is and His goodness.
-                    </li>
-                    <li>
-                        <b>Confession: </b>Admitting where you've messed up and asking for forgiveness.
-                    </li>
-                    <li>
-                        <b>Thanksgiving: </b>Expressing gratitude for all the blessings in your life.
-                    </li>
-                    <li>
-                        <b>Supplication: </b>Asking for your needs and the nees of others.
-                    </li>
-                </ul>
-            <b>3. Find a Local Church</b>
-            <p>When you gave your life to Jesus, you became part of His body-the Church. A local church is a community of believers where you can learn, grow, and serve together. It's a place to find support, friendship, and encouragement.</p>
-            <b>How to find a church:</b>
-            <ul class="indent">
-                <li>
-                    Ask a friend who attends a church they love.
-                </li>
-                <li>
-                    Use a tool like <a href="https://churchfinder.com">Church Finder</a> or <a href="https://www.thegospelcoalition.org/churches">TGC Church Finder</a>.
-                </li>
-                <li>
-                    Look for a church that teaches directly from the Bible and has a welcoming atmosphere.
-                </li>
-            </ul>
-            <b>4. Tell Someone</b>
-            <p>Your story is powerful. Share your decision to follow Jesus with a trusted friend or family member. It doesn't have to be a big, formal annoucement. Just tell someone, "I've decided to follow Jesus," is a great way to make it real and celebrate this new step.
-        </section>
-         <!-- How to Help Section -->
-         <section id="help">
-             <div class="container">
-                <h3>We're Here to Help</h3>
-                <p class="intro-text">
-                    We're so glad you're here. If you have any questions or just want to talk to someone, please don't hestitate to reach out.
-                    <a href="https://x.com/kyletanderson">Follow me on X - @KyleTAnderson</a>
-                </p>
-                <p>Congratuations again on your decision! You have a beautiful and exciting journey ahead.</p>
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide w-full p-8 md:p-12 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-4">
+                            <svg class="fill-rose-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M344 56C344 42.7 333.3 32 320 32C306.7 32 296 42.7 296 56L296 80L264 80C250.7 80 240 90.7 240 104C240 117.3 250.7 128 264 128L296 128L296 176L197.4 241.8C184 250.7 176 265.6 176 281.7L176 320L96.2 365.6C76.3 377 64 398.2 64 421.1L64 512C64 547.3 92.7 576 128 576C202.7 576 213.4 576 448 576L512 576C547.3 576 576 547.3 576 512L576 421.1C576 398.1 563.7 376.9 543.8 365.5L464 320L464 281.7C464 265.7 456 250.7 442.6 241.8L344 176L344 128L376 128C389.3 128 400 117.3 400 104C400 90.7 389.3 80 376 80L344 80L344 56zM320 384C355.3 384 384 412.7 384 448L384 528L256 528L256 448C256 412.7 284.7 384 320 384z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Step 3: Find a Church</h3>
+                        <p class="text-gray-600">You're now part of God's family! Find a local church to connect with other believers, learn more about the Bible, and get support. It's a place to grow together.</p>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="carousel-slide w-full p-8 md:p-12 flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4">
+                            <svg class="fill-amber-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M525.2 82.9C536.7 88 544 99.4 544 112L544 528C544 540.6 536.7 552 525.2 557.1C513.7 562.2 500.4 560.3 490.9 552L444.3 511.3C400.7 473.2 345.6 451 287.9 448.3L287.9 544C287.9 561.7 273.6 576 255.9 576L223.9 576C206.2 576 191.9 561.7 191.9 544L191.9 448C121.3 448 64 390.7 64 320C64 249.3 121.3 192 192 192L276.5 192C338.3 191.8 397.9 169.3 444.4 128.7L491 88C500.4 79.7 513.9 77.8 525.3 82.9zM288 384L288 384.2C358.3 386.9 425.8 412.7 480 457.6L480 182.3C425.8 227.2 358.3 253 288 255.7L288 384z"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Step 4: Let us know</h3>
+                        <p class="text-gray-600">Your story is powerful, tell us about it. Share your decision to follow Jesus with us on X @kyletanderson</p>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Dots -->
+                <div id="carousel-dots" class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+                    <!-- Dots will be generated by JavaScript -->
+                </div>
             </div>
-         </section>
+        </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>© <span id="current-year"></span> The Way Non-Profit. All Rights Reserved.</p>
-        </div>
-    </footer>
-
     <script>
-        // --- Wait for DOM Content ---
         document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carousel');
+            const track = document.getElementById('carousel-track');
+            const slides = Array.from(track.children);
+            const dotsContainer = document.getElementById('carousel-dots');
 
-            // --- Mobile Menu Toggle ---
-            const menuToggleButton = document.getElementById('menu-toggle-button');
-            const mainNav = document.getElementById('main-nav');
-            const navLinksMobile = mainNav.querySelectorAll('a'); // Get links inside nav
+            // --- State Variables ---
+            let currentIndex = 0;
+            let isDragging = false;
+            let startPos = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let animationID;
+            let slideWidth = slides.length > 0 ? slides[0].getBoundingClientRect().width : 0;
 
-            if (menuToggleButton && mainNav) {
-                menuToggleButton.addEventListener('click', () => {
-                    mainNav.classList.toggle('mobile-nav-open');
-                    menuToggleButton.classList.toggle('active'); // Toggle hamburger animation class
+            // --- Setup ---
+            function initializeCarousel() {
+                if (slides.length === 0) return;
+                // Calculate slide width on init and resize
+                slideWidth = slides[0].getBoundingClientRect().width;
+                // Position slides correctly
+                slides.forEach((slide, index) => {
+                    slide.style.left = `${index * slideWidth}px`;
+                });
+                // Create navigation dots
+                createDots();
+                // Update UI to reflect the initial state
+                updateUI();
+            }
 
-                     // ARIA attribute for accessibility
-                    const isExpanded = mainNav.classList.contains('mobile-nav-open');
-                    menuToggleButton.setAttribute('aria-expanded', isExpanded);
+            // --- Event Listeners ---
+            function setupEventListeners() {
+                if (slides.length === 0) return;
+                // Window resize
+                window.addEventListener('resize', () => {
+                    // Recalculate dimensions and snap to the correct slide
+                    slideWidth = slides[0].getBoundingClientRect().width;
+                    setSliderPosition();
                 });
 
-                // --- Close Mobile Menu When a Link is Clicked ---
-                navLinksMobile.forEach(link => {
-                    link.addEventListener('click', () => {
-                        // Check if mobile menu is open before closing
-                         if (mainNav.classList.contains('mobile-nav-open')) {
-                            mainNav.classList.remove('mobile-nav-open');
-                            menuToggleButton.classList.remove('active');
-                            menuToggleButton.setAttribute('aria-expanded', 'false');
-                         }
-                        // The smooth scroll functionality for the link itself is handled below
+                // Keyboard navigation
+                document.addEventListener('keydown', handleKeyDown);
+                // Touch events
+                carousel.addEventListener('touchstart', touchStart, { passive: true });
+                carousel.addEventListener('touchmove', touchMove, { passive: true });
+                carousel.addEventListener('touchend', touchEnd);
+
+                // Mouse events (for desktop)
+                carousel.addEventListener('mousedown', touchStart);
+                carousel.addEventListener('mousemove', touchMove);
+                carousel.addEventListener('mouseup', touchEnd);
+                carousel.addEventListener('mouseleave', touchEnd);
+                
+                // Prevent default drag behavior on images/links
+                carousel.addEventListener('dragstart', (e) => e.preventDefault());
+            }
+
+            // --- Keyboard Handler ---
+            function handleKeyDown(event) {
+                if (event.key === 'ArrowLeft') {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        setSliderPosition();
+                    }
+                } else if (event.key === 'ArrowRight') {
+                    if (currentIndex < slides.length - 1) {
+                        currentIndex++;
+                        setSliderPosition();
+                    }
+                }
+            }
+
+            // --- Event Handlers ---
+            function touchStart(event) {
+                // Get the starting position (for both touch and mouse)
+                startPos = getPositionX(event);
+                isDragging = true;
+                // Disable transition for smooth dragging
+                track.style.transition = 'none';
+                // Store the current translate value
+                prevTranslate = currentTranslate;
+                // Start animation frame loop for smooth updates
+                animationID = requestAnimationFrame(animation);
+            }
+
+            function touchMove(event) {
+                if (isDragging) {
+                    // Calculate how far the cursor/finger has moved
+                    const currentPosition = getPositionX(event);
+                    currentTranslate = prevTranslate + currentPosition - startPos;
+                }
+            }
+
+            function touchEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                // Stop the animation frame loop
+                cancelAnimationFrame(animationID);
+
+                // Calculate how much was swiped
+                const movedBy = currentTranslate - prevTranslate;
+
+                // Determine if the swipe was significant enough to change slides
+                // Threshold is 30% of the slide width
+                if (movedBy < -slideWidth * 0.3 && currentIndex < slides.length - 1) {
+                    currentIndex += 1;
+                } else if (movedBy > slideWidth * 0.3 && currentIndex > 0) {
+                    currentIndex -= 1;
+                }
+
+                // Snap to the new slide position
+                setSliderPosition();
+            }
+
+            // --- Helper Functions ---
+            function getPositionX(event) {
+                // Return the horizontal position for either touch or mouse events
+                return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+            }
+
+            function animation() {
+                // Update the track's position during the drag
+                track.style.transform = `translateX(${currentTranslate}px)`;
+                // Continue the loop if dragging
+                if (isDragging) requestAnimationFrame(animation);
+            }
+
+
+            function setSliderPosition() {
+                // Calculate the new translate value based on the current index
+                currentTranslate = currentIndex * -slideWidth;
+                // Apply the new position with a smooth transition
+                track.style.transition = 'transform 0.3s ease-in-out';
+                track.style.transform = `translateX(${currentTranslate}px)`;
+                // Update the UI (dots)
+                updateUI();
+            }
+
+            // --- UI Update Functions ---
+            function createDots() {
+                // Clear existing dots
+                dotsContainer.innerHTML = '';
+                // Create a dot for each slide
+                slides.forEach((_, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('carousel-dot', 'w-3', 'h-3', 'rounded-full', 'transition-colors', 'duration-300');
+                    button.addEventListener('click', () => {
+                        currentIndex = index;
+                        setSliderPosition();
                     });
+                    dotsContainer.appendChild(button);
                 });
             }
 
-            // --- Visualization & Progress Bar Shared Configuration ---
-            const GOAL_PEOPLE = 5000;
-            let currentPeopleServed = 20; // <<<< SET YOUR INITIAL SERVED COUNT HERE
-
-            // --- Visualization Configuration ---
-            const TRIANGLE_SIDE = 15; // Adjusted size for potentially many triangles
-            const GAP = 1;            // Gap between triangles
-            const SQRT3 = Math.sqrt(3);
-
-            // --- Visualization DOM Elements ---
-            const vizSvg = document.getElementById('triangle-mosaic');
-            const vizContainer = document.getElementById('visualization-container');
-            const vizServedCountSpan = document.getElementById('viz-served-count');
-            const vizRemainingCountSpan = document.getElementById('viz-remaining-count');
-            const vizGoalCountSpan = document.getElementById('viz-goal-count');
-
-            // --- Progress Bar DOM Elements ---
-            const progressBarInner = document.getElementById('progress-bar-inner');
-            const progressCounter = document.getElementById('progress-counter');
-            const progressGoalText = document.getElementById('progress-goal-text');
-
-
-            // --- Visualization Helper Functions ---
-            /**
-             * Generates triangle positions using BFS on a hexagonal grid (axial coordinates).
-             * Returns an array of objects: { q, r, index } sorted by distance from center (index).
-             */
-            function generateSpiralOrder(count) {
-                const positions = [];
-                const visited = new Set();
-                const queue = [{ q: 0, r: 0 }];
-                visited.add("0,0");
-                positions.push({ q: 0, r: 0, index: 0 });
-                const directions = [ { dq: 1, dr: 0 }, { dq: 0, dr: 1 }, { dq: -1, dr: 1 }, { dq: -1, dr: 0 }, { dq: 0, dr: -1 }, { dq: 1, dr: -1 } ];
-                let head = 0;
-                while (positions.length < count && head < queue.length) {
-                    const current = queue[head++];
-                    for (const dir of directions) {
-                        const nq = current.q + dir.dq;
-                        const nr = current.r + dir.dr;
-                        const key = `${nq},${nr}`;
-                        if (!visited.has(key)) {
-                            visited.add(key);
-                            const newIndex = positions.length;
-                            if (newIndex < count) {
-                                positions.push({ q: nq, r: nr, index: newIndex });
-                                queue.push({ q: nq, r: nr });
-                            } else { break; }
-                        }
-                    }
-                    if (positions.length >= count) break;
-                }
-                return positions;
-            }
-
-            /** Calculates pixel center (cx, cy) and orientation (isUp) for a triangle */
-            function getPixelDataForAxial(q, r, S, G) {
-                const H = S * SQRT3 / 2;
-                const effective_horizontal_spacing = S + G;
-                const effective_vertical_row_spacing = H + G * SQRT3 / 2;
-                const cx = effective_horizontal_spacing * (q + r * 0.5);
-                const cy = effective_vertical_row_spacing * r;
-                const isUp = (q + r) % 2 === 0;
-                return { cx, cy, isUp };
-            }
-
-            /** Calculates the vertices of an equilateral triangle. */
-            function getTriangleVertices(cx, cy, S, isUp) {
-                const H = S * SQRT3 / 2;
-                const R = H * 2 / 3; const r = H * 1 / 3;
-                let p1, p2, p3;
-                if (isUp) { p1 = { x: cx, y: cy - R }; p2 = { x: cx - S / 2, y: cy + r }; p3 = { x: cx + S / 2, y: cy + r }; }
-                else { p1 = { x: cx, y: cy + R }; p2 = { x: cx - S / 2, y: cy - r }; p3 = { x: cx + S / 2, y: cy - r }; }
-                return [p1, p2, p3];
-            }
-
-            /** Main drawing function for the visualization. */
-            function drawVisualization(currentServed, total, S, G) {
-                if (!vizSvg || !vizContainer) return; // Exit if elements not found
-
-                // Clear previous SVG content
-                vizSvg.innerHTML = '';
-
-                // Update info text for visualization
-                if(vizServedCountSpan && vizRemainingCountSpan && vizGoalCountSpan) {
-                    vizServedCountSpan.textContent = currentServed.toLocaleString();
-                    vizRemainingCountSpan.textContent = (total - currentServed).toLocaleString();
-                    vizGoalCountSpan.textContent = total.toLocaleString();
-                }
-
-                const spiralOrderData = generateSpiralOrder(total);
-                const trianglePixelData = spiralOrderData.map(axialData => {
-                    const { cx, cy, isUp } = getPixelDataForAxial(axialData.q, axialData.r, S, G);
-                    return { cx, cy, isUp, index: axialData.index };
-                });
-
-                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                const fragment = document.createDocumentFragment();
-
-                trianglePixelData.forEach(data => {
-                    const vertices = getTriangleVertices(data.cx, data.cy, S, data.isUp);
-                    const pointsString = vertices.map(p => `${p.x},${p.y}`).join(' ');
-                    vertices.forEach(p => { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y); });
-                    const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-                    polygon.setAttribute('points', pointsString);
-                    polygon.classList.add('triangle');
-                    if (data.index < currentServed) { polygon.classList.add('served'); }
-                    else { polygon.classList.add('unserved'); }
-                    fragment.appendChild(polygon);
-                });
-
-                vizSvg.appendChild(fragment);
-
-                // Set SVG viewBox
-                const padding = S * 1.5; // Padding around the mosaic
-                const width = (maxX - minX) + padding * 2;
-                const height = (maxY - minY) + padding * 2;
-                const vbMinX = minX - padding;
-                const vbMinY = minY - padding;
-                if (width > 0 && height > 0) {
-                     vizSvg.setAttribute('viewBox', `${vbMinX} ${vbMinY} ${width} ${height}`);
-                     vizSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-                }
-            }
-            // --- End Visualization Functions ---
-
-
-            // --- Combined Update Function (Progress Bar & Visualization) ---
-            function updateProgressDisplays(currentValue, goal) {
-                // Validate Input
-                currentValue = Number(currentValue);
-                goal = Number(goal);
-                if (isNaN(currentValue) || isNaN(goal) || goal <= 0) {
-                    if (progressCounter) progressCounter.textContent = `Progress data unavailable`;
-                    if (vizServedCountSpan) vizServedCountSpan.textContent = 'N/A';
-                    if (vizRemainingCountSpan) vizRemainingCountSpan.textContent = 'N/A';
-                    if (vizGoalCountSpan) vizGoalCountSpan.textContent = goal > 0 ? goal.toLocaleString() : 'N/A';
-                    return;
-                }
-                currentValue = Math.max(0, Math.min(currentValue, goal));
-                const percentage = (currentValue / goal) * 100;
-                const formattedCurrent = currentValue.toLocaleString();
-                const formattedGoal = goal.toLocaleString();
-
-                // 1. Update Mobile Progress Bar
-                if (progressCounter) progressCounter.textContent = `Serving ${formattedCurrent} People`;
-                if (progressGoalText) progressGoalText.textContent = `Goal: ${formattedGoal}`;
-                if (progressBarInner) {
-                    // Apply width update after a tiny delay for transition effect
-                    setTimeout(() => { progressBarInner.style.width = `${percentage}%`; }, 50);
-                }
-
-                // 2. Update Desktop Visualization (Redraw)
-                 // Check if the visualization is potentially visible (basic check)
-                 // More robust would be to check computed style, but this is simpler
-                 if (window.innerWidth > 768) { // Only draw if likely visible
-                     drawVisualization(currentValue, goal, TRIANGLE_SIDE, GAP);
-                 } else {
-                     // If mobile, ensure viz text is updated even if SVG isn't redrawn
-                     if(vizServedCountSpan && vizRemainingCountSpan && vizGoalCountSpan) {
-                        vizServedCountSpan.textContent = formattedCurrent;
-                        vizRemainingCountSpan.textContent = (goal - currentValue).toLocaleString();
-                        vizGoalCountSpan.textContent = formattedGoal;
-                    }
-                 }
-            }
-
-
-            // --- Smooth Scrolling & Active Nav Link (Desktop & Mobile) ---
-            const allNavLinks = document.querySelectorAll('header nav a[href^="#"]'); // Target all nav links now
-            const headerHeight = document.querySelector('header').offsetHeight;
-
-            allNavLinks.forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 15; // Adjusted offset slightly
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        // Mobile menu closing is handled by the separate listener above
+            function updateUI() {
+                // Update the active state of the navigation dots
+                const dots = Array.from(dotsContainer.children);
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('bg-indigo-600');
+                        dot.classList.remove('bg-gray-300');
+                    } else {
+                        dot.classList.add('bg-gray-300');
+                        dot.classList.remove('bg-indigo-600');
                     }
                 });
-            });
-
-            // --- Active link highlighting on scroll ---
-            const sections = document.querySelectorAll('main section[id]'); // Target only main sections
-            const navLinksForHighlight = document.querySelectorAll('#main-nav a[href^="#"]'); // Get all links in the nav
-
-            function updateActiveLink() {
-                 let currentActive = '';
-                 const scrollY = window.pageYOffset;
-
-                 sections.forEach(section => {
-                     const sectionTop = section.offsetTop - headerHeight - 20; // Adjusted offset
-                     const sectionHeight = section.offsetHeight;
-                     // Make activation area slightly larger
-                     const activationStart = sectionTop - sectionHeight * 0.2;
-                     const activationEnd = sectionTop + sectionHeight * 0.8;
-
-                     if (scrollY >= activationStart && scrollY < activationEnd) {
-                         currentActive = section.getAttribute('id');
-                     }
-                 });
-
-                  // Explicit check for hero section (top of page)
-                 if (scrollY < document.querySelector('#about').offsetTop - headerHeight - 50) {
-                     currentActive = 'hero';
-                 }
-                 // Check if near bottom, activate last link ('contact')
-                 if ((window.innerHeight + scrollY) >= document.body.offsetHeight - 50) {
-                      const lastSection = sections[sections.length - 1];
-                      if (lastSection) currentActive = lastSection.getAttribute('id');
-                 }
-
-
-                 navLinksForHighlight.forEach(link => {
-                     link.classList.remove('active');
-                     if (link.getAttribute('href') === `#${currentActive}`) {
-                         link.classList.add('active');
-                     }
-                 });
-
-                 // Fallback if no section is active (e.g., between sections) - keep previous or default to home?
-                 // For simplicity, let's ensure 'Home' is active if nothing else is matched near the top.
-                  let oneLinkIsActive = false;
-                  navLinksForHighlight.forEach(link => { if(link.classList.contains('active')) oneLinkIsActive = true; });
-                  if (!oneLinkIsActive && scrollY < 200) {
-                       const heroLink = document.querySelector('#main-nav a[href="#hero"]');
-                       if (heroLink) heroLink.classList.add('active');
-                   }
             }
 
-            window.addEventListener('scroll', updateActiveLink);
-
-             // --- Update Copyright Year ---
-             const currentYearSpan = document.getElementById('current-year');
-             if(currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-             }
-
-             // --- Set Initial Progress and Draw Visualization ---
-             updateProgressDisplays(currentPeopleServed, GOAL_PEOPLE);
-
-             // --- Set initial active link on load ---
-             // Handle hash in URL if present
-             if (window.location.hash) {
-                const targetElement = document.querySelector(window.location.hash);
-                if (targetElement) {
-                    setTimeout(() => {
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 15;
-                        window.scrollTo({ top: offsetPosition, behavior: 'auto' }); // Use auto scroll on initial load
-                        updateActiveLink(); // Update active link after scrolling
-                    }, 150); // Small delay
-                } else {
-                     updateActiveLink(); // Update based on current scroll even if hash is invalid
-                 }
-             } else {
-                 updateActiveLink(); // Ensure it's called even without hash
-             }
-
-             // Add resize listener to potentially redraw visualization if switching between mobile/desktop
-             let resizeTimer;
-             window.addEventListener('resize', () => {
-                 clearTimeout(resizeTimer);
-                 resizeTimer = setTimeout(() => {
-                     // Only redraw if needed (e.g., if switching across the breakpoint)
-                     updateProgressDisplays(currentPeopleServed, GOAL_PEOPLE);
-                     updateActiveLink(); // Recalculate active link as offsets might change
-                 }, 250); // Debounce resize event
-             });
-
-        }); // End DOMContentLoaded
-
-
-        // --- Simple Contact Form Handler (Client-Side Simulation) ---
-        const contactForm = document.getElementById('contact-form');
-        const formStatus = document.getElementById('form-status');
-        if (contactForm && formStatus) {
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                formStatus.textContent = 'Thank you! Your message has been sent.';
-                formStatus.style.color = '#28a745'; // Success color
-                contactForm.reset();
-                setTimeout(() => { formStatus.textContent = ''; }, 5000);
-            });
-        }
-
+            // --- Initialization ---
+            initializeCarousel();
+            setupEventListeners();
+        });
     </script>
 
 </body>
